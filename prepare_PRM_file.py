@@ -3,6 +3,7 @@
 
 from __future__ import division, print_function
 
+import argparse
 import datetime
 
 from astropy.coordinates import SkyCoord
@@ -10,17 +11,34 @@ from astropy import units as u
 
 __author__ = 'Bruno Quint'
 
-# Input Information ==========================================================
-targets_filename = "./sample_fileA.txt"
-# targets_filename = "./sample_fileB.txt"
+argument_parser = argparse.ArgumentParser(
+    description="Script that reads a list of targets and returns a PRM file to "
+                "be submitted to the SpaceTrack website for runs with SAM.")
 
-yyyy = 2017
-mm = 12
-dd = 20
-utstart = '23:30:00'
-utend = '9:30:00'
-# ============================================================================
+argument_parser.add_argument('targets_filename', type=str, nargs=1,
+                             help="Name of the file that contains list of "
+                                  "targets that will be observed")
 
+argument_parser.add_argument('year', type=int, nargs=1,
+                             help="Year of the beginning of the observing "
+                                  "night.")
+
+argument_parser.add_argument('month', type=int, nargs=1,
+                             help="Month of the beginning of the observing "
+                                  "night")
+
+argument_parser.add_argument('day', type=int, nargs=1,
+                             help="Day of the beginning of the observing night")
+
+argument_parser.add_argument('utstart', type=str, nargs=1,
+                             help="UT hour that the observation starts. "
+                                  "[hh:mm:ss]")
+
+argument_parser.add_argument('utend', type=str, nargs=1,
+                             help="UT hour that the observation stops "
+                                  "[hh:mm:ss]")
+
+args = argument_parser.parse_args()
 
 # PRM File Template ==========================================================
 template = \
@@ -30,10 +48,10 @@ Message Purpose:              Request for Predictive Avoidance Support
 Message Date/Time (UTC):      {today:%Y %b %d (%j) %H:%M:%S}
 Type Windows Requested:       Open
 Point of Contact:             Andrei Tokovinin
-                              (Voice) +56-51-2205286
-                              (Fax) +56-51-2205212
+                              (Voice) +56 51 2205 286
+                              (Fax) +56 51 2205 212
                               (E-mail) sampam@ctio.noao.edu
-Emergency Phone # at Operations Site:+56 51 2205 500/501
+Emergency Phone # at Operations Site: +56 51 2205 500/501
 Remarks:                      
 
 MISSION INFORMATION
@@ -70,13 +88,13 @@ Declination:                  {0.dec.degree:+9.6f}
 """
 
 # Convert mission date to proper format =======================================
-yyyy = int(yyyy)
-mm = int(mm)
-dd = int(dd)
+yyyy = args.year
+mm = args.month
+dd = args.days
 
-utstart = datetime.datetime.strptime(utstart, '%H:%M:%S')
+utstart = datetime.datetime.strptime(args.utstart, '%H:%M:%S')
 
-utend = datetime.datetime.strptime(utend, '%H:%M:%S')
+utend = datetime.datetime.strptime(args.utend, '%H:%M:%S')
 
 # Does mission starts after UT midnight?
 dd1 = dd + 1 if utstart.hour < 12 else dd
@@ -114,7 +132,7 @@ prm_filename = \
 prm = template.format(**locals())
 
 # Reading target file =========================================================
-buffer = open(targets_filename, 'r')
+buffer = open(args.targets_filename, 'r')
 lines = buffer.readlines()
 buffer.close()
 
@@ -153,6 +171,10 @@ for line in lines:
     # Convert EPOCH to be read by SkyCoord format
     epoch = 'J{:s}'.format(epoch) if 'J' not in epoch else epoch
 
+    # If decimal separator is comma convert to dot
+    right_ascention = right_ascention.replace(',', '.')
+    declination = declination.replace(',', '.')
+
     # Create coordinates object
     number_of_targets += 1
     target_coordinates = ' '.join([right_ascention, declination])
@@ -165,7 +187,7 @@ for line in lines:
 
 prm += "\nEND OF FILE"
 
-print('\n Read "{:s}" file.'.format(targets_filename))
+print('\n Read "{:s}" file.'.format(args.targets_filename))
 print(' Number of targets found: {:d} targets'.format(number_of_targets))
 
 # Write the PRM file ==========================================================
