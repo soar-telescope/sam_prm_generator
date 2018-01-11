@@ -15,26 +15,26 @@ argument_parser = argparse.ArgumentParser(
     description="Script that reads a list of targets and returns a PRM file to "
                 "be submitted to the SpaceTrack website for runs with SAM.")
 
-argument_parser.add_argument('targets_filename', type=str, nargs=1,
+argument_parser.add_argument('targets_filename', type=str,
                              help="Name of the file that contains list of "
                                   "targets that will be observed")
 
-argument_parser.add_argument('year', type=int, nargs=1,
+argument_parser.add_argument('year', type=int,
                              help="Year of the beginning of the observing "
                                   "night.")
 
-argument_parser.add_argument('month', type=int, nargs=1,
+argument_parser.add_argument('month', type=int,
                              help="Month of the beginning of the observing "
                                   "night")
 
-argument_parser.add_argument('day', type=int, nargs=1,
+argument_parser.add_argument('day', type=int,
                              help="Day of the beginning of the observing night")
 
-argument_parser.add_argument('utstart', type=str, nargs=1,
+argument_parser.add_argument('utstart', type=str,
                              help="UT hour that the observation starts. "
                                   "[hh:mm:ss]")
 
-argument_parser.add_argument('utend', type=str, nargs=1,
+argument_parser.add_argument('utend', type=str,
                              help="UT hour that the observation stops "
                                   "[hh:mm:ss]")
 
@@ -90,7 +90,7 @@ Declination:                  {0.dec.degree:+9.6f}
 # Convert mission date to proper format =======================================
 yyyy = args.year
 mm = args.month
-dd = args.days
+dd = args.day
 
 utstart = datetime.datetime.strptime(args.utstart, '%H:%M:%S')
 
