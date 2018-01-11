@@ -46,4 +46,8 @@ Here is an example:
 
     $ ./prepare_PRM_file.py list_of_targets.txt 2018 12 25 23:00:00 09:00:00
 
-
+The list of targets must follow the 
+[SOAR Guidelines to prepare a list of targets](http://www.ctio.noao.edu/soar/content/creating-targets-lists-soar).
+The Right Ascention and Declination coordinates can be input as `HH:MM:SS.S DD:MM:SS.S` or
+`HH MM SS.S DD MM SS.S` formats. The epoch can be as an integer (e.g., `2000`) or
+ as a string (e.g., `J2000`).

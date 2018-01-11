@@ -179,7 +179,7 @@ for line in lines:
     number_of_targets += 1
     target_coordinates = ' '.join([right_ascention, declination])
     target_coordinates = SkyCoord(
-        target_coordinates, unit=(u.hourangle, u.deg), equinox='J2000')
+        target_coordinates, unit=(u.hourangle, u.deg), equinox=epoch)
 
     # Convert to string and add to the PRM file
     target_in_string = target_template.format(target_coordinates)
