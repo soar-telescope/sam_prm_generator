@@ -9,7 +9,7 @@ import datetime
 from astropy.coordinates import SkyCoord
 from astropy import units as u
 
-__author__ = 'Bruno Quint'
+__author__ = 'Bruno Quint & Felipe Navarete'
 
 argument_parser = argparse.ArgumentParser(
     description="Script that reads a list of targets and returns a PRM file to "
@@ -50,7 +50,7 @@ Type Windows Requested:       Open
 Point of Contact:             Andrei Tokovinin
                               (Voice) +56 51 2205 286
                               (Fax) +56 51 2205 212
-                              (E-mail) sampam@ctio.noao.edu
+                              (E-mail) soar-laser@noirlab.edu
 Emergency Phone # at Operations Site: +56 51 2205 500/501
 Remarks:                      
 
@@ -125,7 +125,7 @@ minutes = mission_duration.seconds % 3600 // 60
 seconds = mission_duration.seconds % 60
 
 prm_filename = \
-    'PRM_AURA_SAM_SOAR_355nm_10W_4.46urad_10kHz_1_' + \
+    'PRM_AURA_SAM_SOAR_' + \
     '{today:%d%b%Y}_For_JDAY{utstart:%j}_RADEC.txt'.format(**locals())
 
 # Fill the template with the previous information
